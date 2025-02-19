@@ -3,6 +3,7 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 require('dotenv').config();
 const { fetchJobs } = require('./jobs');
+const mongoose = require('mongoose');
 
 app.length('/', (req, res) => {
     res.send('Job Notifier App is running.')
@@ -13,3 +14,8 @@ app.listen(PORT, () => {
 })
 
 fetchJobs();
+
+mongoose
+    .connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true }) 
+    .then(() => console.log("MongoDB connected"))
+    .catch((err) => console.error('MongoDB connection error:', err));
