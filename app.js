@@ -5,7 +5,7 @@ require('dotenv').config();
 const { fetchJobs } = require('./jobs');
 const mongoose = require('mongoose');
 
-app.length('/', (req, res) => {
+app.get('/', (req, res) => {
     res.send('Job Notifier App is running.')
 });
 
