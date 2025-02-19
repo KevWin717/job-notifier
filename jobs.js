@@ -1,19 +1,24 @@
+require('dotenv').config();
 const axios = require('axios');
 const Job = require('./models/Job')
 
+// console.log('MONGO_URI:', process.env.MONGO_URI);
+
 const fetchJobs = async () => {
     try {
+        const params = {
+            app_id: process.env.APP_ID,
+            app_key: process.env.API_KEY,
+            results_per_page: 50,
+            what: process.env.JOB_SEARCH_TERM || 'software engineer',
+            where: process.env.JOB_LOCATION || 'Austin, TX',
+        };
+
+        console.log('Request Params:', params);
+
         const response = await axios.get(
             'https://api.adzuna.com/v1/api/jobs/us/search/1',
-            {
-                params: {
-                    app_id: process.env.APP_ID,
-                    app_key: process.env.API_Key,
-                    results_per_page: 5,
-                    what: 'software engineer',
-                    where: 'Austin, TX',
-                },
-            }
+            { params }
         );
         
         const jobs = response.data.results;
@@ -36,7 +41,14 @@ const fetchJobs = async () => {
             }
         }
     } catch (error) {
-        console.error('Error fetching jobs:', error.message);
+        if (error.response) {
+            console.error(`Error fetching jobs: ${error.response.status} - ${error.response.statusText}`);
+            console.error('Response data:', error.response.data);
+        } else if (error.request) {
+            console.error('No response received:', error.request);
+        } else {
+            console.error('Error setting up the request:', error.message);
+        }
     }
 };
 
