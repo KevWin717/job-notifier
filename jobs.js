@@ -35,9 +35,9 @@ const fetchJobs = async () => {
                     url: jobData.redirect_url,
                 });
                 await job.save();
-                console.log('Saved job: ${job.title}');
+                console.log(`Saved job: ${job.title}`);
             } else {
-                console.log('Job already exists: ${existingJob.title}');
+                console.log(`Job already exists: ${existingJob.title}`);
             }
         }
     } catch (error) {
